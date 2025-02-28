@@ -203,18 +203,27 @@ int main(void) {
             case STATE_MOVING: {
                 int currentFloor = elevio_floorSensor();
                 if (currentFloor != -1) {
-                elevio_floorIndicator(currentFloor);
+                    elevio_floorIndicator(currentFloor);
                 }
                 // Ved ankomst til etasje med en bestilling, stopp og åpne døren
-                if (currentFloor != -1 && ordersAtFloor(currentFloor)){
+                if (currentFloor != -1 && ordersAtFloor(currentFloor)) {
                     if ((currentDirection == DIRN_UP && (orders[currentFloor][BUTTON_HALL_UP] || orders[currentFloor][BUTTON_CAB])) ||
                         (currentDirection == DIRN_DOWN && (orders[currentFloor][BUTTON_HALL_DOWN] || orders[currentFloor][BUTTON_CAB]))) {
                         elevio_motorDirection(DIRN_STOP);
                         state = STATE_DOOR_OPEN;
                         clearOrdersAtFloor(currentFloor);
                     }
-                    break;
-                }           
+                } else {
+                    if ((currentDirection == DIRN_UP && !ordersAbove(currentFloor)) ||
+                        (currentDirection == DIRN_DOWN && !ordersBelow(currentFloor))) {
+                        MotorDirection nextDir = chooseDirection(currentFloor);
+                        if (nextDir != currentDirection) {
+                            currentDirection = nextDir;
+                            elevio_motorDirection(currentDirection);
+                        }
+                    }
+                }
+                break;
             }
         
             case STATE_DOOR_OPEN: {
