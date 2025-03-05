@@ -20,6 +20,7 @@ void calibrateElevator() {
             calibrated = 1;
             elevio_motorDirection(DIRN_STOP);
             elevio_floorIndicator(floor);
+            lastFloor = floor;
             break;
         }
         nanosleep(&(struct timespec){0, SLEEP_NS}, NULL);
@@ -171,11 +172,13 @@ int main(void) {
             elevio_stopLamp(1);
             elevio_motorDirection(DIRN_STOP);
             clearAllOrders();
+    
             // Dersom heisen er i en etasje, åpnes døren
             int currentFloor = elevio_floorSensor();
             if (currentFloor != -1) {
                 openDoor();
             }
+            currentFloor = lastFloor;
             // Vent til stoppknappen slippes
             while (elevio_stopButton()) {
                 nanosleep(&(struct timespec){0, SLEEP_NS}, NULL);
@@ -183,9 +186,7 @@ int main(void) {
             elevio_stopLamp(0);
             elevio_doorOpenLamp(0);
             state = STATE_IDLE;
-            if (currentFloor == -1) {
-                calibrated = 0;
-            }
+            
         }
         
         // Kalibreringsfase: Ignorer bestillinger før heisen er i en definert tilstand
@@ -203,6 +204,7 @@ int main(void) {
         int currentFloor = elevio_floorSensor();
         if (currentFloor != -1) {
             elevio_floorIndicator(currentFloor);
+            lastFloor = currentFloor;
         }
         
         // Tilstandsmaskin for heisens oppførsel
@@ -218,9 +220,9 @@ int main(void) {
                 break;
             }
             case STATE_MOVING: {
-                int currentFloor = elevio_floorSensor();
                 if (currentFloor != -1) {
                     elevio_floorIndicator(currentFloor);
+                    lastFloor = currentFloor;
                 
                 // Ved ankomst til etasje med en bestilling, stopp og åpne døren
                 if (currentFloor != -1 && ordersAtFloor(currentFloor)){

@@ -8,6 +8,7 @@
 // Globale variabler for bestillinger og kalibrering
 int orders[N_FLOORS][N_BUTTONS] = { { 0 } };
 int calibrated = 0;
+int lastFloor = 0;
 
 // Definerer heisens tilstander
 typedef enum {
