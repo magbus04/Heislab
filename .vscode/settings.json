@@ -1,3 +1,4 @@
 {
-    "C_Cpp.default.compilerPath": "c:\\Users\\annel\\Downloads\\vs_BuildTools.exe"
+    "C_Cpp.default.compilerPath": "c:\\Users\\annel\\Downloads\\vs_BuildTools.exe",
+    "sarif-viewer.connectToGithubCodeScanning": "off"
 }

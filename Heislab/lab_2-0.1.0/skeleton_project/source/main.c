@@ -118,7 +118,7 @@ MotorDirection chooseDirection(int currentFloor) {
     if (currentDirection == DIRN_DOWN && orderBelow) {
         return DIRN_DOWN;
     }
-    
+
     if (orderAbove) {
         return DIRN_UP;
     }
@@ -138,6 +138,7 @@ void openDoor(void) {
         if (elevio_obstruction() || elevio_stopButton()) {
             start = time(NULL);
         }
+        updateOrders();
         nanosleep(&(struct timespec){0, SLEEP_NS}, NULL);
     }
     elevio_doorOpenLamp(0);
@@ -157,17 +158,20 @@ int main(void) {
         // Sikkerhet: Håndter stoppknappen
         if (elevio_stopButton()) {
             state = STATE_EMERGENCY_STOP;
+            elevio_stopLamp(1);
             elevio_motorDirection(DIRN_STOP);
             clearAllOrders();
             // Dersom heisen er i en etasje, åpnes døren
             int currentFloor = elevio_floorSensor();
-            if (currentFloor != -1)
-                elevio_doorOpenLamp(1);
+            if (currentFloor != -1) {
+                openDoor();
+            }
             // Vent til stoppknappen slippes
             while (elevio_stopButton()) {
                 nanosleep(&(struct timespec){0, SLEEP_NS}, NULL);
             }
             elevio_stopLamp(0);
+            elevio_doorOpenLamp(0);
             state = STATE_IDLE;
         }
         
@@ -203,19 +207,36 @@ int main(void) {
             case STATE_MOVING: {
                 int currentFloor = elevio_floorSensor();
                 if (currentFloor != -1) {
-                elevio_floorIndicator(currentFloor);
-                }
+                    elevio_floorIndicator(currentFloor);
+                
                 // Ved ankomst til etasje med en bestilling, stopp og åpne døren
                 if (currentFloor != -1 && ordersAtFloor(currentFloor)){
-                    if ((currentDirection == DIRN_UP && (orders[currentFloor][BUTTON_HALL_UP] || orders[currentFloor][BUTTON_CAB])) ||
-                        (currentDirection == DIRN_DOWN && (orders[currentFloor][BUTTON_HALL_DOWN] || orders[currentFloor][BUTTON_CAB]))) {
+                    if ((currentDirection == DIRN_UP && (orders[currentFloor][BUTTON_HALL_UP] || orders[currentFloor][BUTTON_CAB] || (orders[3][BUTTON_HALL_DOWN] && currentFloor == 3))) ||
+                        (currentDirection == DIRN_DOWN && (orders[currentFloor][BUTTON_HALL_DOWN] || orders[currentFloor][BUTTON_CAB] || (orders[0][BUTTON_HALL_UP] && currentFloor == 0)))) {
                         elevio_motorDirection(DIRN_STOP);
                         state = STATE_DOOR_OPEN;
                         clearOrdersAtFloor(currentFloor);
+                        printf("used complex if\n");
                     }
-                    break;
+                    else {
+                        printf("used else\n");
+                        if (ordersBelow(currentFloor) == 1 && currentDirection == DIRN_UP){
+                            printf("keeps going up\n");
+                            goto skip_stop;
+                        }
+                        if (ordersAbove(currentFloor) == 1 && currentDirection == DIRN_DOWN){
+                            printf("keeps going down\n");
+                            goto skip_stop;
+                        }
+                        elevio_motorDirection(DIRN_STOP);
+                        state = STATE_DOOR_OPEN;
+                        clearOrdersAtFloor(currentFloor);
+                        printf("didnt break\n");
+                    }                  
                 }           
             }
+            break;
+        }
         
             case STATE_DOOR_OPEN: {
                 openDoor();
@@ -229,7 +250,7 @@ int main(void) {
                 // Skal ikke inntreffe her siden kalibreringen allerede håndteres
                 break;
         }
-        
+        skip_stop:
         nanosleep(&(struct timespec){0, SLEEP_NS}, NULL);
     }
     
