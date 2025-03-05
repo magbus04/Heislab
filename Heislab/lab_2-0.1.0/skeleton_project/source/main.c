@@ -35,10 +35,17 @@ void updateOrders(void) {
     for (int f = 0; f < N_FLOORS; f++) {
         for (int b = 0; b < N_BUTTONS; b++) {
             int btnStatus = elevio_callButton(f, b);
+            int currentFloor = elevio_floorSensor();
+            if (currentFloor == f && btnStatus) {
+                openDoor();
+                goto skip_order;
+            }
             if (btnStatus) {
                 orders[f][b] = 1;
                 elevio_buttonLamp(f, b, 1);
             }
+            skip_order:
+            continue;
         }
     }
 }
@@ -70,9 +77,9 @@ void clearAllOrders(void) {
     }
 }
 
-int ordersAbove(int currentFloor) {
+int ordersBelow(int currentFloor) {
 for (int b = 0; b <= 2; b+=2) {
-    for (int f = currentFloor + 1; f < N_FLOORS; f++) {
+    for (int f = currentFloor - 1; f >= 0; f--) {
         if (checkButton(f,b)) {
             return 1;
         }
@@ -80,7 +87,7 @@ for (int b = 0; b <= 2; b+=2) {
 }
 return 0;
 }
-int ordersBelow(int currentFloor) {
+int ordersAbove(int currentFloor) {
     for (int b = 1; b <= 2; b++) {
         for (int f = currentFloor + 1; f < N_FLOORS; f++) {
             if (checkButton(f,b)) {
@@ -135,6 +142,9 @@ void openDoor(void) {
     elevio_doorOpenLamp(1);
     time_t start = time(NULL);
     while (time(NULL) - start < DOOR_OPEN_TIME) {
+        if (elevio_stopButton() == 0) {
+            elevio_stopLamp(0);
+        }
         if (elevio_obstruction() || elevio_stopButton()) {
             start = time(NULL);
         }
@@ -173,6 +183,9 @@ int main(void) {
             elevio_stopLamp(0);
             elevio_doorOpenLamp(0);
             state = STATE_IDLE;
+            if (currentFloor == -1) {
+                calibrated = 0;
+            }
         }
         
         // Kalibreringsfase: Ignorer bestillinger før heisen er i en definert tilstand
@@ -220,11 +233,11 @@ int main(void) {
                     }
                     else {
                         printf("used else\n");
-                        if (ordersBelow(currentFloor) == 1 && currentDirection == DIRN_UP){
+                        if (ordersAbove(currentFloor) == 1 && currentDirection == DIRN_UP){
                             printf("keeps going up\n");
                             goto skip_stop;
                         }
-                        if (ordersAbove(currentFloor) == 1 && currentDirection == DIRN_DOWN){
+                        if (ordersBelow(currentFloor) == 1 && currentDirection == DIRN_DOWN){
                             printf("keeps going down\n");
                             goto skip_stop;
                         }
