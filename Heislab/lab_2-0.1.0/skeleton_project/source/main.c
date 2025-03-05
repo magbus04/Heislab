@@ -211,7 +211,7 @@ int main(void) {
         switch (state) {
             case STATE_IDLE: {
                 // Dersom det finnes ventende bestillinger, velg retning og begynn å bevege deg
-                MotorDirection nextDir = chooseDirection(currentFloor);
+                MotorDirection nextDir = chooseDirection(lastFloor);
                 if (nextDir != DIRN_STOP) {
                     currentDirection = nextDir;
                     elevio_motorDirection(currentDirection);
