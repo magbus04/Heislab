@@ -1,0 +1,280 @@
+\doxysection{main.\+c}
+\hypertarget{main_8c_source}{}\label{main_8c_source}\index{source/main.c@{source/main.c}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00001}00001\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00003}00003\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <time.h>}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <unistd.h>}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00006}00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{elevio_8h}{driver/elevio.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00007}00007\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{main_8h}{main.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00009}00009\ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00010}00010\ \textcolor{comment}{//\ Kalibreringsfunksjon:\ Få\ heisen\ til\ å\ komme\ til\ en\ definert\ etasje\ ved\ oppstart}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00011}\mbox{\hyperlink{main_8h_abc784b8bc91be148f5a4fc245d100d20}{00011}}\ \textcolor{keywordtype}{void}\ calibrateElevator()\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00012}00012\ \ \ \ \ \textcolor{comment}{//\ Beveg\ heisen\ nedover\ til\ en\ gyldig\ floor}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00013}00013\ \ \ \ \ elevio\_motorDirection(DIRN\_DOWN);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00014}00014\ \ \ \ \ \textcolor{keywordtype}{int}\ floor;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00015}00015\ \ \ \ \ \textcolor{keywordflow}{while}\ (1)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00016}00016\ \ \ \ \ \ \ \ \ floor\ =\ elevio\_floorSensor();}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00017}00017\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Current\ floor:\ \%d\(\backslash\)n"{}},\ floor);\ \textcolor{comment}{//\ Debug\ print\ statement}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00019}00019\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (floor\ !=\ -\/1)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00020}00020\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Kalibrering\ ferdig}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00021}00021\ \ \ \ \ \ \ \ \ \ \ \ \ calibrated\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00022}00022\ \ \ \ \ \ \ \ \ \ \ \ \ elevio\_motorDirection(DIRN\_STOP);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00023}00023\ \ \ \ \ \ \ \ \ \ \ \ \ elevio\_floorIndicator(floor);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00024}00024\ \ \ \ \ \ \ \ \ \ \ \ \ lastFloor\ =\ floor;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00025}00025\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00026}00026\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00027}00027\ \ \ \ \ \ \ \ \ nanosleep(\&(\textcolor{keyword}{struct}\ timespec)\{0,\ SLEEP\_NS\},\ NULL);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00028}00028\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00029}00029\ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00031}00031\ \textcolor{comment}{//\ Oppdaterer\ bestillingsmatrisen\ ved\ å\ sjekke\ alle\ knapper}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00032}\mbox{\hyperlink{main_8h_a2a55bc3e393802d4e6c91d338121d09b}{00032}}\ \textcolor{keywordtype}{void}\ updateOrders(\textcolor{keywordtype}{void})\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00033}00033\ \ \ \ \ \textcolor{comment}{//\ Ignorer\ bestillinger\ dersom\ heisen\ ikke\ er\ kalibrert}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00034}00034\ \ \ \ \ \textcolor{keywordflow}{if}\ (!calibrated)}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00035}00035\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00036}00036\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00037}00037\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ f\ =\ 0;\ f\ <\ N\_FLOORS;\ f++)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00038}00038\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ b\ =\ 0;\ b\ <\ N\_BUTTONS;\ b++)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00039}00039\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ btnStatus\ =\ elevio\_callButton(f,\ b);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00040}00040\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ currentFloor\ =\ elevio\_floorSensor();}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00041}00041\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (currentFloor\ ==\ f\ \&\&\ btnStatus)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00042}00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ openDoor();}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00043}00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{goto}\ skip\_order;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00044}00044\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00045}00045\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (btnStatus)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00046}00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ orders[f][b]\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00047}00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ elevio\_buttonLamp(f,\ b,\ 1);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00048}00048\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00049}00049\ \ \ \ \ \ \ \ \ \ \ \ \ skip\_order:}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00050}00050\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00051}00051\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00052}00052\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00053}00053\ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00054}00054\ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00055}00055\ \textcolor{comment}{//\ Sjekker\ om\ det\ finnes\ en\ bestilling\ i\ en\ spesifikk\ etasje}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00056}\mbox{\hyperlink{main_8h_a3486c5c805bc26cb16a577265e02a1b9}{00056}}\ \textcolor{keywordtype}{int}\ ordersAtFloor(\textcolor{keywordtype}{int}\ floor)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00057}00057\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ b\ =\ 0;\ b\ <\ N\_BUTTONS;\ b++)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00058}00058\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (orders[floor][b])}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00059}00059\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00060}00060\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00061}00061\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00062}00062\ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00063}00063\ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00064}00064\ \textcolor{comment}{//\ Fjerner\ bestillinger\ for\ en\ etasje\ og\ slukker\ knappelysene}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00065}\mbox{\hyperlink{main_8h_a95cdf668eddf2bd0141dee2e273d8ef8}{00065}}\ \textcolor{keywordtype}{void}\ clearOrdersAtFloor(\textcolor{keywordtype}{int}\ floor)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00066}00066\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ b\ =\ 0;\ b\ <\ N\_BUTTONS;\ b++)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00067}00067\ \ \ \ \ \ \ \ \ orders[floor][b]\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00068}00068\ \ \ \ \ \ \ \ \ elevio\_buttonLamp(floor,\ b,\ 0);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00069}00069\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00070}00070\ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00071}00071\ \textcolor{keywordtype}{int}\ checkButton(\textcolor{keywordtype}{int}\ floor,\ \textcolor{keywordtype}{int}\ b)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00072}00072\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ orders[floor][b];}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00073}00073\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00074}00074\ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00075}00075\ \textcolor{comment}{//\ Fjerner\ alle\ ventende\ bestillinger}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00076}\mbox{\hyperlink{main_8h_a59bc0a073658889af715930389981901}{00076}}\ \textcolor{keywordtype}{void}\ clearAllOrders(\textcolor{keywordtype}{void})\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00077}00077\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ f\ =\ 0;\ f\ <\ N\_FLOORS;\ f++)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00078}00078\ \ \ \ \ \ \ \ \ clearOrdersAtFloor(f);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00079}00079\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00080}00080\ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00081}00081\ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00082}\mbox{\hyperlink{main_8h_a64568aee955796e5a5b0022451c2122c}{00082}}\ \textcolor{keywordtype}{int}\ ordersBelow(\textcolor{keywordtype}{int}\ currentFloor)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00083}00083\ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ b\ =\ 0;\ b\ <=\ 2;\ b+=2)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00084}00084\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ f\ =\ currentFloor\ -\/\ 1;\ f\ >=\ 0;\ f-\/-\/)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00085}00085\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (checkButton(f,b))\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00086}00086\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00087}00087\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00088}00088\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00089}00089\ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00090}00090\ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00091}00091\ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00092}\mbox{\hyperlink{main_8h_a2723a8854167014a182bafa16a47f935}{00092}}\ \textcolor{keywordtype}{int}\ ordersAbove(\textcolor{keywordtype}{int}\ currentFloor)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00093}00093\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ b\ =\ 1;\ b\ <=\ 2;\ b++)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00094}00094\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ f\ =\ currentFloor\ +\ 1;\ f\ <\ N\_FLOORS;\ f++)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00095}00095\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (checkButton(f,b))\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00096}00096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00097}00097\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00098}00098\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00099}00099\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00100}00100\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00101}00101\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00102}00102\ \textcolor{comment}{//\ Velger\ retning\ basert\ på\ ventende\ bestillinger\ og\ den\ nåværende\ etasjen}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00103}00103\ \textcolor{comment}{//\ Kun\ bestillinger\ i\ den\ aktuelle\ retningen\ tas\ med}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00104}\mbox{\hyperlink{main_8h_ab2b585ff7fc7962f84f327a23c212670}{00104}}\ MotorDirection\ chooseDirection(\textcolor{keywordtype}{int}\ currentFloor)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00105}00105\ \ \ \ \ \textcolor{keywordtype}{int}\ orderAbove\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00106}00106\ \ \ \ \ \textcolor{keywordtype}{int}\ orderBelow\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00107}00107\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00108}00108\ \ \ \ \ \textcolor{comment}{//\ Sjekk\ etter\ bestillinger\ over\ floor}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00109}00109\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ f\ =\ currentFloor\ +\ 1;\ f\ <\ N\_FLOORS;\ f++)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00110}00110\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ordersAtFloor(f))\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00111}00111\ \ \ \ \ \ \ \ \ \ \ \ \ orderAbove\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00112}00112\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00113}00113\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00114}00114\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00115}00115\ \ \ \ \ \textcolor{comment}{//\ Sjekk\ etter\ bestillinger\ under\ floor}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00116}00116\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ f\ =\ 0;\ f\ <\ currentFloor;\ f++)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00117}00117\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ordersAtFloor(f))\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00118}00118\ \ \ \ \ \ \ \ \ \ \ \ \ orderBelow\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00119}00119\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00120}00120\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00121}00121\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00122}00122\ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00123}00123\ \ \ \ \ \textcolor{keywordflow}{if}\ (currentDirection\ ==\ DIRN\_UP\ \&\&\ orderAbove)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00124}00124\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ DIRN\_UP;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00125}00125\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00126}00126\ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00127}00127\ \ \ \ \ \textcolor{keywordflow}{if}\ (currentDirection\ ==\ DIRN\_DOWN\ \&\&\ orderBelow)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00128}00128\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ DIRN\_DOWN;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00129}00129\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00130}00130\ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00131}00131\ \ \ \ \ \textcolor{keywordflow}{if}\ (orderAbove)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00132}00132\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ DIRN\_UP;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00133}00133\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00134}00134\ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00135}00135\ \ \ \ \ \textcolor{keywordflow}{if}\ (orderBelow)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00136}00136\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ DIRN\_DOWN;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00137}00137\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00138}00138\ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00139}00139\ \ \ \ \ \textcolor{keywordflow}{return}\ DIRN\_STOP;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00140}00140\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00141}00141\ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00142}00142\ \textcolor{comment}{//\ Åpner\ døren\ i\ 3\ sekunder.\ Hvis\ obstruksjon\ eller\ stoppknappen\ aktiveres,\ fornyes\ timeren}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00143}\mbox{\hyperlink{main_8h_a0733525b77710d1c965898c384c1da68}{00143}}\ \textcolor{keywordtype}{void}\ openDoor(\textcolor{keywordtype}{void})\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00144}00144\ \ \ \ \ elevio\_doorOpenLamp(1);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00145}00145\ \ \ \ \ time\_t\ start\ =\ time(NULL);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00146}00146\ \ \ \ \ \textcolor{keywordflow}{while}\ (time(NULL)\ -\/\ start\ <\ DOOR\_OPEN\_TIME)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00147}00147\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (elevio\_stopButton()\ ==\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00148}00148\ \ \ \ \ \ \ \ \ \ \ \ \ elevio\_stopLamp(0);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00149}00149\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00150}00150\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (elevio\_obstruction()\ ||\ elevio\_stopButton())\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00151}00151\ \ \ \ \ \ \ \ \ \ \ \ \ start\ =\ time(NULL);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00152}00152\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00153}00153\ \ \ \ \ \ \ \ \ updateOrders();}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00154}00154\ \ \ \ \ \ \ \ \ nanosleep(\&(\textcolor{keyword}{struct}\ timespec)\{0,\ SLEEP\_NS\},\ NULL);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00155}00155\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00156}00156\ \ \ \ \ elevio\_doorOpenLamp(0);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00157}00157\ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00158}00158\ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00159}00159\ \textcolor{keywordtype}{int}\ main(\textcolor{keywordtype}{void})\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00160}00160\ \ \ \ \ \textcolor{comment}{//\ Starter\ heissystemet}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00161}00161\ \ \ \ \ elevio\_init();}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00162}00162\ \ \ \ \ state\ =\ STATE\_IDLE;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00163}00163\ \ \ \ \ currentDirection\ =\ DIRN\_STOP;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00164}00164\ \ \ \ \ calibrated\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00165}00165\ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00166}00166\ \ \ \ \ printf(\textcolor{stringliteral}{"{}===\ Elevator\ system\ test\ ===\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00167}00167\ \ \ \ \ printf(\textcolor{stringliteral}{"{}Press\ the\ stop\ button\ on\ the\ elevator\ panel\ to\ exit\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00168}00168\ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00169}00169\ \ \ \ \ \textcolor{keywordflow}{while}\ (1)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00170}00170\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Sikkerhet:\ Håndter\ stoppknappen}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00171}00171\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (elevio\_stopButton())\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00172}00172\ \ \ \ \ \ \ \ \ \ \ \ \ state\ =\ STATE\_EMERGENCY\_STOP;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00173}00173\ \ \ \ \ \ \ \ \ \ \ \ \ elevio\_stopLamp(1);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00174}00174\ \ \ \ \ \ \ \ \ \ \ \ \ elevio\_motorDirection(DIRN\_STOP);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00175}00175\ \ \ \ \ \ \ \ \ \ \ \ \ clearAllOrders();}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00176}00176\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00177}00177\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Dersom\ heisen\ er\ i\ en\ etasje,\ åpnes\ døren}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00178}00178\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ currentFloor\ =\ elevio\_floorSensor();}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00179}00179\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (currentFloor\ !=\ -\/1)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00180}00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ openDoor();}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00181}00181\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00182}00182\ \ \ \ \ \ \ \ \ \ \ \ \ currentFloor\ =\ lastFloor;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00183}00183\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Vent\ til\ stoppknappen\ slippes}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00184}00184\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (elevio\_stopButton())\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00185}00185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ nanosleep(\&(\textcolor{keyword}{struct}\ timespec)\{0,\ SLEEP\_NS\},\ NULL);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00186}00186\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00187}00187\ \ \ \ \ \ \ \ \ \ \ \ \ elevio\_stopLamp(0);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00188}00188\ \ \ \ \ \ \ \ \ \ \ \ \ elevio\_doorOpenLamp(0);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00189}00189\ \ \ \ \ \ \ \ \ \ \ \ \ state\ =\ STATE\_IDLE;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00190}00190\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00191}00191\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00192}00192\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00193}00193\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Kalibreringsfase:\ Ignorer\ bestillinger\ før\ heisen\ er\ i\ en\ definert\ tilstand}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00194}00194\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (calibrated\ ==\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00195}00195\ \ \ \ \ \ \ \ \ \ \ \ \ state\ =\ STATE\_CALIBRATING;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00196}00196\ \ \ \ \ \ \ \ \ \ \ \ \ calibrateElevator();}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00197}00197\ \ \ \ \ \ \ \ \ \ \ \ \ state\ =\ STATE\_IDLE;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00198}00198\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00199}00199\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00200}00200\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00201}00201\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Oppdater\ bestillinger\ (hvis\ stoppknappen\ ikke\ er\ aktivert)}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00202}00202\ \ \ \ \ \ \ \ \ updateOrders();}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00203}00203\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00204}00204\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Hent\ nåværende\ etasje\ og\ oppdater\ etasjelyset}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00205}00205\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ currentFloor\ =\ elevio\_floorSensor();}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00206}00206\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (currentFloor\ !=\ -\/1)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00207}00207\ \ \ \ \ \ \ \ \ \ \ \ \ elevio\_floorIndicator(currentFloor);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00208}00208\ \ \ \ \ \ \ \ \ \ \ \ \ lastFloor\ =\ currentFloor;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00209}00209\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00210}00210\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00211}00211\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Tilstandsmaskin\ for\ heisens\ oppførsel}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00212}00212\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (state)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00213}00213\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ STATE\_IDLE:\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00214}00214\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Dersom\ det\ finnes\ ventende\ bestillinger,\ velg\ retning\ og\ begynn\ å\ bevege\ deg}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00215}00215\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ MotorDirection\ nextDir\ =\ chooseDirection(lastFloor);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00216}00216\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (nextDir\ !=\ DIRN\_STOP)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00217}00217\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ currentDirection\ =\ nextDir;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00218}00218\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ elevio\_motorDirection(currentDirection);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00219}00219\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ state\ =\ STATE\_MOVING;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00220}00220\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00221}00221\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00222}00222\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00223}00223\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ STATE\_MOVING:\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00224}00224\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (currentFloor\ !=\ -\/1)\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00225}00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ elevio\_floorIndicator(currentFloor);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00226}00226\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ lastFloor\ =\ currentFloor;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00227}00227\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00228}00228\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ved\ ankomst\ til\ etasje\ med\ en\ bestilling,\ stopp\ og\ åpne\ døren}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00229}00229\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (currentFloor\ !=\ -\/1\ \&\&\ ordersAtFloor(currentFloor))\{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00230}00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((currentDirection\ ==\ DIRN\_UP\ \&\&\ (orders[currentFloor][BUTTON\_HALL\_UP]\ ||\ orders[currentFloor][BUTTON\_CAB]\ ||\ (orders[3][BUTTON\_HALL\_DOWN]\ \&\&\ currentFloor\ ==\ 3)))\ ||}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00231}00231\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (currentDirection\ ==\ DIRN\_DOWN\ \&\&\ (orders[currentFloor][BUTTON\_HALL\_DOWN]\ ||\ orders[currentFloor][BUTTON\_CAB]\ ||\ (orders[0][BUTTON\_HALL\_UP]\ \&\&\ currentFloor\ ==\ 0))))\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00232}00232\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ elevio\_motorDirection(DIRN\_STOP);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00233}00233\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ state\ =\ STATE\_DOOR\_OPEN;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00234}00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ clearOrdersAtFloor(currentFloor);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00235}00235\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}used\ complex\ if\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00236}00236\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00237}00237\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00238}00238\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}used\ else\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00239}00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ordersAbove(currentFloor)\ ==\ 1\ \&\&\ currentDirection\ ==\ DIRN\_UP)\{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00240}00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}keeps\ going\ up\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00241}00241\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{goto}\ skip\_stop;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00242}00242\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00243}00243\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ordersBelow(currentFloor)\ ==\ 1\ \&\&\ currentDirection\ ==\ DIRN\_DOWN)\{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00244}00244\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}keeps\ going\ down\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00245}00245\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{goto}\ skip\_stop;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00246}00246\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00247}00247\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ elevio\_motorDirection(DIRN\_STOP);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00248}00248\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ state\ =\ STATE\_DOOR\_OPEN;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00249}00249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ clearOrdersAtFloor(currentFloor);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00250}00250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}didnt\ break\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00251}00251\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00252}00252\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00253}00253\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00254}00254\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00255}00255\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00256}00256\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00257}00257\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ STATE\_DOOR\_OPEN:\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00258}00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ openDoor();}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00259}00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ state\ =\ STATE\_IDLE;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00260}00260\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00261}00261\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00262}00262\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ STATE\_EMERGENCY\_STOP:}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00263}00263\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Denne\ tilstanden\ håndteres\ øverst\ i\ loopen}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00264}00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00265}00265\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ STATE\_CALIBRATING:}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00266}00266\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Skal\ ikke\ inntreffe\ her\ siden\ kalibreringen\ allerede\ håndteres}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00267}00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00268}00268\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00269}00269\ \ \ \ \ \ \ \ \ skip\_stop:}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00270}00270\ \ \ \ \ \ \ \ \ nanosleep(\&(\textcolor{keyword}{struct}\ timespec)\{0,\ SLEEP\_NS\},\ NULL);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00271}00271\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00272}00272\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00273}00273\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00274}00274\ \}}
+
+\end{DoxyCode}

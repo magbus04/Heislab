@@ -1,0 +1,18 @@
+\doxysection{elev\+\_\+test.\+c}
+\hypertarget{elev__test_8c_source}{}\label{elev__test_8c_source}\index{source/driver/elev\_test.c@{source/driver/elev\_test.c}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{elev__test_8c_source_l00001}00001\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{elevio_8h}{elevio.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{elev__test_8c_source_l00002}00002\ }
+\DoxyCodeLine{\Hypertarget{elev__test_8c_source_l00003}00003\ \textcolor{keywordtype}{int}\ main(\textcolor{keywordtype}{void})\{}
+\DoxyCodeLine{\Hypertarget{elev__test_8c_source_l00004}00004\ \ \ \ \ elevio\_init();}
+\DoxyCodeLine{\Hypertarget{elev__test_8c_source_l00005}00005\ }
+\DoxyCodeLine{\Hypertarget{elev__test_8c_source_l00006}00006\ \ \ \ \ \textcolor{keywordflow}{while}(1)\{}
+\DoxyCodeLine{\Hypertarget{elev__test_8c_source_l00007}00007\ \ \ \ \ \ \ \ \ elevio\_motorDirection(DIRN\_DOWN);}
+\DoxyCodeLine{\Hypertarget{elev__test_8c_source_l00008}00008\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(elevio\_floorSensor()\ !=\ 0)\{\}}
+\DoxyCodeLine{\Hypertarget{elev__test_8c_source_l00009}00009\ \ \ \ \ \ \ \ \ elevio\_motorDirection(DIRN\_UP);}
+\DoxyCodeLine{\Hypertarget{elev__test_8c_source_l00010}00010\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(elevio\_floorSensor()\ !=\ 3)\{\}}
+\DoxyCodeLine{\Hypertarget{elev__test_8c_source_l00011}00011\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{elev__test_8c_source_l00012}00012\ \}}
+
+\end{DoxyCode}

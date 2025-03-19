@@ -1,0 +1,135 @@
+\doxysection{elevio.\+c}
+\hypertarget{elevio_8c_source}{}\label{elevio_8c_source}\index{source/driver/elevio.c@{source/driver/elevio.c}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00001}00001\ \textcolor{preprocessor}{\#include\ <assert.h>}}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00003}00003\ \textcolor{preprocessor}{\#include\ <sys/types.h>}}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <sys/socket.h>}}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <netdb.h>}}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00006}00006\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00007}00007\ \textcolor{preprocessor}{\#include\ <pthread.h>}}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00009}00009\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{elevio_8h}{elevio.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00010}00010\ \textcolor{preprocessor}{\#include\ "{}con\_load.h"{}}}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00011}00011\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00012}00012\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ sockfd;}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00013}00013\ \textcolor{keyword}{static}\ pthread\_mutex\_t\ sockmtx;}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00015}\mbox{\hyperlink{elevio_8h_acec5e6d14134b881216887fe15aca830}{00015}}\ \textcolor{keywordtype}{void}\ elevio\_init(\textcolor{keywordtype}{void})\{}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00016}00016\ \ \ \ \ \textcolor{keywordtype}{char}\ ip[16]\ =\ \textcolor{stringliteral}{"{}localhost"{}};}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00017}00017\ \ \ \ \ \textcolor{keywordtype}{char}\ port[8]\ =\ \textcolor{stringliteral}{"{}15657"{}};}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00018}00018\ \ \ \ \ con\_load(\textcolor{stringliteral}{"{}elevio.con"{}},}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00019}00019\ \ \ \ \ \ \ \ \ con\_val(\textcolor{stringliteral}{"{}com\_ip"{}},\ \ \ ip,\ \ \ \textcolor{stringliteral}{"{}\%s"{}})}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00020}00020\ \ \ \ \ \ \ \ \ con\_val(\textcolor{stringliteral}{"{}com\_port"{}},\ port,\ \textcolor{stringliteral}{"{}\%s"{}})}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00021}00021\ \ \ \ \ )}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00022}00022\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00023}00023\ \ \ \ \ pthread\_mutex\_init(\&sockmtx,\ NULL);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00024}00024\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00025}00025\ \ \ \ \ sockfd\ =\ socket(AF\_INET,\ SOCK\_STREAM,\ 0);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00026}00026\ \ \ \ \ assert(sockfd\ !=\ -\/1\ \&\&\ \textcolor{stringliteral}{"{}Unable\ to\ set\ up\ socket"{}});}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00027}00027\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00028}00028\ \ \ \ \ \textcolor{keyword}{struct\ }addrinfo\ hints\ =\ \{}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00029}00029\ \ \ \ \ \ \ \ \ .ai\_family\ \ \ \ \ \ =\ AF\_INET,\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00030}00030\ \ \ \ \ \ \ \ \ .ai\_socktype\ \ \ \ =\ SOCK\_STREAM,\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00031}00031\ \ \ \ \ \ \ \ \ .ai\_protocol\ \ \ \ =\ IPPROTO\_TCP,}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00032}00032\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00033}00033\ \ \ \ \ \textcolor{keyword}{struct\ }addrinfo*\ res;}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00034}00034\ \ \ \ \ getaddrinfo(ip,\ port,\ \&hints,\ \&res);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00035}00035\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00036}00036\ \ \ \ \ \textcolor{keywordtype}{int}\ fail\ =\ connect(sockfd,\ res-\/>ai\_addr,\ res-\/>ai\_addrlen);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00037}00037\ \ \ \ \ assert(fail\ ==\ 0\ \&\&\ \textcolor{stringliteral}{"{}Unable\ to\ connect\ to\ elevator\ server"{}});}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00038}00038\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00039}00039\ \ \ \ \ freeaddrinfo(res);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00040}00040\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00041}00041\ \ \ \ \ send(sockfd,\ (\textcolor{keywordtype}{char}[4])\{0\},\ 4,\ 0);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00042}00042\ \}}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00046}00046\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00047}\mbox{\hyperlink{elevio_8h_ab2e6dcf199387c1dd6f78e2bf6fff56e}{00047}}\ \textcolor{keywordtype}{void}\ elevio\_motorDirection(MotorDirection\ dirn)\{}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00048}00048\ \ \ \ \ pthread\_mutex\_lock(\&sockmtx);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00049}00049\ \ \ \ \ send(sockfd,\ (\textcolor{keywordtype}{char}[4])\{1,\ dirn\},\ 4,\ 0);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00050}00050\ \ \ \ \ pthread\_mutex\_unlock(\&sockmtx);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00051}00051\ \}}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00053}00053\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00054}\mbox{\hyperlink{elevio_8h_a182079eb4c29f71ff3b5049a2fd082a3}{00054}}\ \textcolor{keywordtype}{void}\ elevio\_buttonLamp(\textcolor{keywordtype}{int}\ floor,\ ButtonType\ button,\ \textcolor{keywordtype}{int}\ value)\{}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00055}00055\ \ \ \ \ assert(floor\ >=\ 0);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00056}00056\ \ \ \ \ assert(floor\ <\ N\_FLOORS);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00057}00057\ \ \ \ \ assert(button\ >=\ 0);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00058}00058\ \ \ \ \ assert(button\ <\ N\_BUTTONS);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00060}00060\ \ \ \ \ pthread\_mutex\_lock(\&sockmtx);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00061}00061\ \ \ \ \ send(sockfd,\ (\textcolor{keywordtype}{char}[4])\{2,\ button,\ floor,\ value\},\ 4,\ 0);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00062}00062\ \ \ \ \ pthread\_mutex\_unlock(\&sockmtx);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00063}00063\ \}}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00064}00064\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00065}00065\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00066}\mbox{\hyperlink{elevio_8h_a184a3b9bd68d9f38ada735288059b823}{00066}}\ \textcolor{keywordtype}{void}\ elevio\_floorIndicator(\textcolor{keywordtype}{int}\ floor)\{}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00067}00067\ \ \ \ \ assert(floor\ >=\ 0);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00068}00068\ \ \ \ \ assert(floor\ <\ N\_FLOORS);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00069}00069\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00070}00070\ \ \ \ \ pthread\_mutex\_lock(\&sockmtx);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00071}00071\ \ \ \ \ send(sockfd,\ (\textcolor{keywordtype}{char}[4])\{3,\ floor\},\ 4,\ 0);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00072}00072\ \ \ \ \ pthread\_mutex\_unlock(\&sockmtx);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00073}00073\ \}}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00074}00074\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00075}00075\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00076}\mbox{\hyperlink{elevio_8h_a7784247f816e8beee3a0538f070d9357}{00076}}\ \textcolor{keywordtype}{void}\ elevio\_doorOpenLamp(\textcolor{keywordtype}{int}\ value)\{}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00077}00077\ \ \ \ \ pthread\_mutex\_lock(\&sockmtx);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00078}00078\ \ \ \ \ send(sockfd,\ (\textcolor{keywordtype}{char}[4])\{4,\ value\},\ 4,\ 0);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00079}00079\ \ \ \ \ pthread\_mutex\_unlock(\&sockmtx);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00080}00080\ \}}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00081}00081\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00082}00082\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00083}\mbox{\hyperlink{elevio_8h_ac0411a180087d6ac13a3d97eda809ba0}{00083}}\ \textcolor{keywordtype}{void}\ elevio\_stopLamp(\textcolor{keywordtype}{int}\ value)\{}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00084}00084\ \ \ \ \ pthread\_mutex\_lock(\&sockmtx);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00085}00085\ \ \ \ \ send(sockfd,\ (\textcolor{keywordtype}{char}[4])\{5,\ value\},\ 4,\ 0);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00086}00086\ \ \ \ \ pthread\_mutex\_unlock(\&sockmtx);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00087}00087\ \}}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00088}00088\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00089}00089\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00090}00090\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00091}00091\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00092}\mbox{\hyperlink{elevio_8h_a2485d7d293f03756a852ee1f796b9e1f}{00092}}\ \textcolor{keywordtype}{int}\ elevio\_callButton(\textcolor{keywordtype}{int}\ floor,\ ButtonType\ button)\{}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00093}00093\ \ \ \ \ pthread\_mutex\_lock(\&sockmtx);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00094}00094\ \ \ \ \ send(sockfd,\ (\textcolor{keywordtype}{char}[4])\{6,\ button,\ floor\},\ 4,\ 0);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00095}00095\ \ \ \ \ \textcolor{keywordtype}{char}\ buf[4];}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00096}00096\ \ \ \ \ recv(sockfd,\ buf,\ 4,\ 0);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00097}00097\ \ \ \ \ pthread\_mutex\_unlock(\&sockmtx);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00098}00098\ \ \ \ \ \textcolor{keywordflow}{return}\ buf[1];}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00099}00099\ \}}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00100}00100\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00101}00101\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00102}\mbox{\hyperlink{elevio_8h_a6c30a3c0241ebf37a9014679e1bf288d}{00102}}\ \textcolor{keywordtype}{int}\ elevio\_floorSensor(\textcolor{keywordtype}{void})\{}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00103}00103\ \ \ \ \ pthread\_mutex\_lock(\&sockmtx);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00104}00104\ \ \ \ \ send(sockfd,\ (\textcolor{keywordtype}{char}[4])\{7\},\ 4,\ 0);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00105}00105\ \ \ \ \ \textcolor{keywordtype}{char}\ buf[4];}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00106}00106\ \ \ \ \ recv(sockfd,\ buf,\ 4,\ 0);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00107}00107\ \ \ \ \ pthread\_mutex\_unlock(\&sockmtx);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00108}00108\ \ \ \ \ \textcolor{keywordflow}{return}\ buf[1]\ ?\ buf[2]\ :\ -\/1;}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00109}00109\ \}}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00110}00110\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00112}\mbox{\hyperlink{elevio_8h_a73cf5844bdae806dc8d0afa3e0edab70}{00112}}\ \textcolor{keywordtype}{int}\ elevio\_stopButton(\textcolor{keywordtype}{void})\{}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00113}00113\ \ \ \ \ pthread\_mutex\_lock(\&sockmtx);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00114}00114\ \ \ \ \ send(sockfd,\ (\textcolor{keywordtype}{char}[4])\{8\},\ 4,\ 0);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00115}00115\ \ \ \ \ \textcolor{keywordtype}{char}\ buf[4];}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00116}00116\ \ \ \ \ recv(sockfd,\ buf,\ 4,\ 0);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00117}00117\ \ \ \ \ pthread\_mutex\_unlock(\&sockmtx);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00118}00118\ \ \ \ \ \textcolor{keywordflow}{return}\ buf[1];}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00119}00119\ \}}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00120}00120\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00122}\mbox{\hyperlink{elevio_8h_a96c87bf2164a6aa64d116f6137b8ee78}{00122}}\ \textcolor{keywordtype}{int}\ elevio\_obstruction(\textcolor{keywordtype}{void})\{}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00123}00123\ \ \ \ \ pthread\_mutex\_lock(\&sockmtx);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00124}00124\ \ \ \ \ send(sockfd,\ (\textcolor{keywordtype}{char}[4])\{9\},\ 4,\ 0);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00125}00125\ \ \ \ \ \textcolor{keywordtype}{char}\ buf[4];}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00126}00126\ \ \ \ \ recv(sockfd,\ buf,\ 4,\ 0);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00127}00127\ \ \ \ \ pthread\_mutex\_unlock(\&sockmtx);}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00128}00128\ \ \ \ \ \textcolor{keywordflow}{return}\ buf[1];}
+\DoxyCodeLine{\Hypertarget{elevio_8c_source_l00129}00129\ \}}
+
+\end{DoxyCode}

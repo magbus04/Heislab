@@ -1,0 +1,351 @@
+\doxysection{source/main.h File Reference}
+\hypertarget{main_8h}{}\label{main_8h}\index{source/main.h@{source/main.h}}
+
+
+The main file for the elevator project.  
+
+
+{\ttfamily \#include "{}driver/elevio.\+h"{}}\newline
+Include dependency graph for main.\+h\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{main_8h_aeb981ad353005166cbe672cc49a4ae06}{DOOR\+\_\+\+OPEN\+\_\+\+TIME}}~3
+\item 
+\#define \mbox{\hyperlink{main_8h_a0c75ffa55c4e5de3293bf5efe2047db3}{SLEEP\+\_\+\+NS}}~(20 \texorpdfstring{$\ast$}{*} 1000 \texorpdfstring{$\ast$}{*} 1000)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum {\bfseries Elevator\+State} \{ \newline
+{\bfseries STATE\+\_\+\+CALIBRATING}
+, {\bfseries STATE\+\_\+\+IDLE}
+, {\bfseries STATE\+\_\+\+MOVING}
+, {\bfseries STATE\+\_\+\+DOOR\+\_\+\+OPEN}
+, \newline
+{\bfseries STATE\+\_\+\+EMERGENCY\+\_\+\+STOP}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{main_8h_abc784b8bc91be148f5a4fc245d100d20}{calibrate\+Elevator}} ()
+\begin{DoxyCompactList}\small\item\em Kalibreringsfunksjon\+: Få heisen til å komme til en definert etasje ved oppstart. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8h_a2a55bc3e393802d4e6c91d338121d09b}{update\+Orders}} (void)
+\begin{DoxyCompactList}\small\item\em Oppdaterer bestillingsmatrisen ved å sjekke alle knapper. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{main_8h_a3486c5c805bc26cb16a577265e02a1b9}{orders\+At\+Floor}} (int floor)
+\begin{DoxyCompactList}\small\item\em Sjekker om det finnes en bestilling i en spesifikk etasje. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8h_a95cdf668eddf2bd0141dee2e273d8ef8}{clear\+Orders\+At\+Floor}} (int floor)
+\begin{DoxyCompactList}\small\item\em Fjerner bestillinger for en etasje og slukker knappelysene. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{main_8h_af372dbfb4f7c3ff005728e622fe31fc7}{checkbutton}} (int floor, int b)
+\begin{DoxyCompactList}\small\item\em Sjekker en knapp på en etasje. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8h_a59bc0a073658889af715930389981901}{clear\+All\+Orders}} (void)
+\begin{DoxyCompactList}\small\item\em Fjerner alle bestillinger og slukker alle knappelys. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{main_8h_a64568aee955796e5a5b0022451c2122c}{orders\+Below}} (int current\+Floor)
+\begin{DoxyCompactList}\small\item\em Sjekker om det finnes bestillinger under en etasje. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{main_8h_a2723a8854167014a182bafa16a47f935}{orders\+Above}} (int current\+Floor)
+\begin{DoxyCompactList}\small\item\em Sjekker om det finnes bestillinger over en etasje. \end{DoxyCompactList}\item 
+Motor\+Direction \mbox{\hyperlink{main_8h_ab2b585ff7fc7962f84f327a23c212670}{choose\+Direction}} (int current\+Floor)
+\begin{DoxyCompactList}\small\item\em Velger retning basert på ventende bestillinger og den nåværende etasjen. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8h_a0733525b77710d1c965898c384c1da68}{open\+Door}} (void)
+\begin{DoxyCompactList}\small\item\em Åpner døren i 3 sekunder. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{main_8h_a4cb690b9b5eb9affed4a8205b1c253e3}{orders}} \mbox{[}N\+\_\+\+FLOORS\mbox{]}\mbox{[}N\+\_\+\+BUTTONS\mbox{]} = \{ \{ 0 \} \}
+\item 
+int \mbox{\hyperlink{main_8h_a632cd27ab67016390ed9562e8625d77f}{calibrated}} = 0
+\item 
+int \mbox{\hyperlink{main_8h_a1e05344789be5e2ad933965fbf9178ee}{last\+Floor}} = 0
+\item 
+Elevator\+State \mbox{\hyperlink{main_8h_a99e0331a8870d4ef971ac51499c6fae2}{state}} = STATE\+\_\+\+CALIBRATING
+\item 
+Motor\+Direction \mbox{\hyperlink{main_8h_acc789e2ac06c82795f6d95a26b2fc780}{current\+Direction}} = DIRN\+\_\+\+STOP
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The main file for the elevator project. 
+
+
+
+Definition in file \mbox{\hyperlink{main_8h_source}{main.\+h}}.
+
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{main_8h_aeb981ad353005166cbe672cc49a4ae06}\label{main_8h_aeb981ad353005166cbe672cc49a4ae06} 
+\index{main.h@{main.h}!DOOR\_OPEN\_TIME@{DOOR\_OPEN\_TIME}}
+\index{DOOR\_OPEN\_TIME@{DOOR\_OPEN\_TIME}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{DOOR\_OPEN\_TIME}{DOOR\_OPEN\_TIME}}
+{\footnotesize\ttfamily \#define DOOR\+\_\+\+OPEN\+\_\+\+TIME~3}
+
+
+
+Definition at line \mbox{\hyperlink{main_8h_source_l00005}{5}} of file \mbox{\hyperlink{main_8h_source}{main.\+h}}.
+
+\Hypertarget{main_8h_a0c75ffa55c4e5de3293bf5efe2047db3}\label{main_8h_a0c75ffa55c4e5de3293bf5efe2047db3} 
+\index{main.h@{main.h}!SLEEP\_NS@{SLEEP\_NS}}
+\index{SLEEP\_NS@{SLEEP\_NS}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{SLEEP\_NS}{SLEEP\_NS}}
+{\footnotesize\ttfamily \#define SLEEP\+\_\+\+NS~(20 \texorpdfstring{$\ast$}{*} 1000 \texorpdfstring{$\ast$}{*} 1000)}
+
+
+
+Definition at line \mbox{\hyperlink{main_8h_source_l00006}{6}} of file \mbox{\hyperlink{main_8h_source}{main.\+h}}.
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{main_8h_ada8a6679b36fc4f29442334494afb588}\label{main_8h_ada8a6679b36fc4f29442334494afb588} 
+\index{main.h@{main.h}!ElevatorState@{ElevatorState}}
+\index{ElevatorState@{ElevatorState}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{ElevatorState}{ElevatorState}}
+{\footnotesize\ttfamily enum Elevator\+State}
+
+
+
+Definition at line \mbox{\hyperlink{main_8h_source_l00018}{18}} of file \mbox{\hyperlink{main_8h_source}{main.\+h}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{main_8h_abc784b8bc91be148f5a4fc245d100d20}\label{main_8h_abc784b8bc91be148f5a4fc245d100d20} 
+\index{main.h@{main.h}!calibrateElevator@{calibrateElevator}}
+\index{calibrateElevator@{calibrateElevator}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{calibrateElevator()}{calibrateElevator()}}
+{\footnotesize\ttfamily void calibrate\+Elevator (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Kalibreringsfunksjon\+: Få heisen til å komme til en definert etasje ved oppstart. 
+
+
+
+Definition at line \mbox{\hyperlink{main_8c_source_l00011}{11}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+
+\Hypertarget{main_8h_af372dbfb4f7c3ff005728e622fe31fc7}\label{main_8h_af372dbfb4f7c3ff005728e622fe31fc7} 
+\index{main.h@{main.h}!checkbutton@{checkbutton}}
+\index{checkbutton@{checkbutton}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{checkbutton()}{checkbutton()}}
+{\footnotesize\ttfamily int checkbutton (\begin{DoxyParamCaption}\item[{int}]{floor,  }\item[{int}]{b }\end{DoxyParamCaption})}
+
+
+
+Sjekker en knapp på en etasje. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em floor} & Etasjen som skal sjekkes \\
+\hline
+{\em b} & Knappen som skal sjekkes \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 1 hvis bestillingen er gyldig, 0 ellers 
+\end{DoxyReturn}
+\Hypertarget{main_8h_ab2b585ff7fc7962f84f327a23c212670}\label{main_8h_ab2b585ff7fc7962f84f327a23c212670} 
+\index{main.h@{main.h}!chooseDirection@{chooseDirection}}
+\index{chooseDirection@{chooseDirection}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{chooseDirection()}{chooseDirection()}}
+{\footnotesize\ttfamily Motor\+Direction choose\+Direction (\begin{DoxyParamCaption}\item[{int}]{current\+Floor }\end{DoxyParamCaption})}
+
+
+
+Velger retning basert på ventende bestillinger og den nåværende etasjen. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em current\+Floor} & Nåværende etasje \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Motor\+Direction Retning som heisen skal bevege seg 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{main_8c_source_l00104}{104}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+
+\Hypertarget{main_8h_a59bc0a073658889af715930389981901}\label{main_8h_a59bc0a073658889af715930389981901} 
+\index{main.h@{main.h}!clearAllOrders@{clearAllOrders}}
+\index{clearAllOrders@{clearAllOrders}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{clearAllOrders()}{clearAllOrders()}}
+{\footnotesize\ttfamily void clear\+All\+Orders (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Fjerner alle bestillinger og slukker alle knappelys. 
+
+
+
+Definition at line \mbox{\hyperlink{main_8c_source_l00076}{76}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+
+\Hypertarget{main_8h_a95cdf668eddf2bd0141dee2e273d8ef8}\label{main_8h_a95cdf668eddf2bd0141dee2e273d8ef8} 
+\index{main.h@{main.h}!clearOrdersAtFloor@{clearOrdersAtFloor}}
+\index{clearOrdersAtFloor@{clearOrdersAtFloor}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{clearOrdersAtFloor()}{clearOrdersAtFloor()}}
+{\footnotesize\ttfamily void clear\+Orders\+At\+Floor (\begin{DoxyParamCaption}\item[{int}]{floor }\end{DoxyParamCaption})}
+
+
+
+Fjerner bestillinger for en etasje og slukker knappelysene. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em floor} & Etasjen som skal tømmes for bestillinger \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{main_8c_source_l00065}{65}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+
+\Hypertarget{main_8h_a0733525b77710d1c965898c384c1da68}\label{main_8h_a0733525b77710d1c965898c384c1da68} 
+\index{main.h@{main.h}!openDoor@{openDoor}}
+\index{openDoor@{openDoor}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{openDoor()}{openDoor()}}
+{\footnotesize\ttfamily void open\+Door (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Åpner døren i 3 sekunder. 
+
+
+
+Definition at line \mbox{\hyperlink{main_8c_source_l00143}{143}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+
+\Hypertarget{main_8h_a2723a8854167014a182bafa16a47f935}\label{main_8h_a2723a8854167014a182bafa16a47f935} 
+\index{main.h@{main.h}!ordersAbove@{ordersAbove}}
+\index{ordersAbove@{ordersAbove}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{ordersAbove()}{ordersAbove()}}
+{\footnotesize\ttfamily int orders\+Above (\begin{DoxyParamCaption}\item[{int}]{current\+Floor }\end{DoxyParamCaption})}
+
+
+
+Sjekker om det finnes bestillinger over en etasje. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em current\+Floor} & Etasjen som skal sjekkes \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 1 hvis det finnes bestillinger over etasjen, 0 ellers 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{main_8c_source_l00092}{92}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+
+\Hypertarget{main_8h_a3486c5c805bc26cb16a577265e02a1b9}\label{main_8h_a3486c5c805bc26cb16a577265e02a1b9} 
+\index{main.h@{main.h}!ordersAtFloor@{ordersAtFloor}}
+\index{ordersAtFloor@{ordersAtFloor}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{ordersAtFloor()}{ordersAtFloor()}}
+{\footnotesize\ttfamily int orders\+At\+Floor (\begin{DoxyParamCaption}\item[{int}]{floor }\end{DoxyParamCaption})}
+
+
+
+Sjekker om det finnes en bestilling i en spesifikk etasje. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em floor} & Etasjen som skal sjekkes \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 1 hvis det finnes en bestilling i order-\/matrisen, 0 ellers 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{main_8c_source_l00056}{56}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+
+\Hypertarget{main_8h_a64568aee955796e5a5b0022451c2122c}\label{main_8h_a64568aee955796e5a5b0022451c2122c} 
+\index{main.h@{main.h}!ordersBelow@{ordersBelow}}
+\index{ordersBelow@{ordersBelow}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{ordersBelow()}{ordersBelow()}}
+{\footnotesize\ttfamily int orders\+Below (\begin{DoxyParamCaption}\item[{int}]{current\+Floor }\end{DoxyParamCaption})}
+
+
+
+Sjekker om det finnes bestillinger under en etasje. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em current\+Floor} & Etasjen som skal sjekkes \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 1 hvis det finnes bestillinger under etasjen, 0 ellers 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{main_8c_source_l00082}{82}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+
+\Hypertarget{main_8h_a2a55bc3e393802d4e6c91d338121d09b}\label{main_8h_a2a55bc3e393802d4e6c91d338121d09b} 
+\index{main.h@{main.h}!updateOrders@{updateOrders}}
+\index{updateOrders@{updateOrders}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{updateOrders()}{updateOrders()}}
+{\footnotesize\ttfamily void update\+Orders (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Oppdaterer bestillingsmatrisen ved å sjekke alle knapper. 
+
+
+
+Definition at line \mbox{\hyperlink{main_8c_source_l00032}{32}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{main_8h_a632cd27ab67016390ed9562e8625d77f}\label{main_8h_a632cd27ab67016390ed9562e8625d77f} 
+\index{main.h@{main.h}!calibrated@{calibrated}}
+\index{calibrated@{calibrated}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{calibrated}{calibrated}}
+{\footnotesize\ttfamily int calibrated = 0}
+
+
+
+Definition at line \mbox{\hyperlink{main_8h_source_l00010}{10}} of file \mbox{\hyperlink{main_8h_source}{main.\+h}}.
+
+\Hypertarget{main_8h_acc789e2ac06c82795f6d95a26b2fc780}\label{main_8h_acc789e2ac06c82795f6d95a26b2fc780} 
+\index{main.h@{main.h}!currentDirection@{currentDirection}}
+\index{currentDirection@{currentDirection}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{currentDirection}{currentDirection}}
+{\footnotesize\ttfamily Motor\+Direction current\+Direction = DIRN\+\_\+\+STOP}
+
+
+
+Definition at line \mbox{\hyperlink{main_8h_source_l00027}{27}} of file \mbox{\hyperlink{main_8h_source}{main.\+h}}.
+
+\Hypertarget{main_8h_a1e05344789be5e2ad933965fbf9178ee}\label{main_8h_a1e05344789be5e2ad933965fbf9178ee} 
+\index{main.h@{main.h}!lastFloor@{lastFloor}}
+\index{lastFloor@{lastFloor}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{lastFloor}{lastFloor}}
+{\footnotesize\ttfamily int last\+Floor = 0}
+
+
+
+Definition at line \mbox{\hyperlink{main_8h_source_l00011}{11}} of file \mbox{\hyperlink{main_8h_source}{main.\+h}}.
+
+\Hypertarget{main_8h_a4cb690b9b5eb9affed4a8205b1c253e3}\label{main_8h_a4cb690b9b5eb9affed4a8205b1c253e3} 
+\index{main.h@{main.h}!orders@{orders}}
+\index{orders@{orders}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{orders}{orders}}
+{\footnotesize\ttfamily int orders\mbox{[}N\+\_\+\+FLOORS\mbox{]}\mbox{[}N\+\_\+\+BUTTONS\mbox{]} = \{ \{ 0 \} \}}
+
+
+
+Definition at line \mbox{\hyperlink{main_8h_source_l00009}{9}} of file \mbox{\hyperlink{main_8h_source}{main.\+h}}.
+
+\Hypertarget{main_8h_a99e0331a8870d4ef971ac51499c6fae2}\label{main_8h_a99e0331a8870d4ef971ac51499c6fae2} 
+\index{main.h@{main.h}!state@{state}}
+\index{state@{state}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{state}{state}}
+{\footnotesize\ttfamily Elevator\+State state = STATE\+\_\+\+CALIBRATING}
+
+
+
+Definition at line \mbox{\hyperlink{main_8h_source_l00026}{26}} of file \mbox{\hyperlink{main_8h_source}{main.\+h}}.
+

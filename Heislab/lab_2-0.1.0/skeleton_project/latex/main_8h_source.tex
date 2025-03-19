@@ -1,0 +1,40 @@
+\doxysection{main.\+h}
+\hypertarget{main_8h_source}{}\label{main_8h_source}\index{source/main.h@{source/main.h}}
+\mbox{\hyperlink{main_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00001}00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00002}00002\ }
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00003}00003\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{elevio_8h}{driver/elevio.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00005}00005\ \textcolor{preprocessor}{\#define\ DOOR\_OPEN\_TIME\ 3\ \ \ \ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ Døråpentid:\ 3\ sekunder}}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00006}00006\ \textcolor{preprocessor}{\#define\ SLEEP\_NS\ (20\ *\ 1000\ *\ 1000)\ \ \ }\textcolor{comment}{//\ 20\ ms\ pause\ i\ loopen}}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00007}00007\ }
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00008}00008\ \textcolor{comment}{//\ Globale\ variabler\ for\ bestillinger\ og\ kalibrering}}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00009}00009\ \textcolor{keywordtype}{int}\ orders[N\_FLOORS][N\_BUTTONS]\ =\ \{\ \{\ 0\ \}\ \};}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00010}00010\ \textcolor{keywordtype}{int}\ calibrated\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00011}00011\ \textcolor{keywordtype}{int}\ lastFloor\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00017}00017\ \textcolor{comment}{//\ Definerer\ heisens\ tilstander}}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00018}00018\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00019}00019\ \ \ \ \ STATE\_CALIBRATING,}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00020}00020\ \ \ \ \ STATE\_IDLE,}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00021}00021\ \ \ \ \ STATE\_MOVING,}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00022}00022\ \ \ \ \ STATE\_DOOR\_OPEN,}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00023}00023\ \ \ \ \ STATE\_EMERGENCY\_STOP}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00024}00024\ \}\ ElevatorState;}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00026}00026\ ElevatorState\ state\ =\ STATE\_CALIBRATING;}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00027}00027\ MotorDirection\ currentDirection\ =\ DIRN\_STOP;}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00029}00029\ \textcolor{comment}{//\ Funksjonsprototyper}}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00034}00034\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{main_8h_abc784b8bc91be148f5a4fc245d100d20}{calibrateElevator}}();}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00039}00039\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{main_8h_a2a55bc3e393802d4e6c91d338121d09b}{updateOrders}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00046}00046\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{main_8h_a3486c5c805bc26cb16a577265e02a1b9}{ordersAtFloor}}(\textcolor{keywordtype}{int}\ floor);}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00052}00052\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{main_8h_a95cdf668eddf2bd0141dee2e273d8ef8}{clearOrdersAtFloor}}(\textcolor{keywordtype}{int}\ floor);}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00060}\mbox{\hyperlink{main_8h_af372dbfb4f7c3ff005728e622fe31fc7}{00060}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{main_8h_af372dbfb4f7c3ff005728e622fe31fc7}{checkbutton}}(\textcolor{keywordtype}{int}\ floor,\ \textcolor{keywordtype}{int}\ b);}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00065}00065\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{main_8h_a59bc0a073658889af715930389981901}{clearAllOrders}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00072}00072\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{main_8h_a64568aee955796e5a5b0022451c2122c}{ordersBelow}}(\textcolor{keywordtype}{int}\ currentFloor);}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00079}00079\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{main_8h_a2723a8854167014a182bafa16a47f935}{ordersAbove}}(\textcolor{keywordtype}{int}\ currentFloor);}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00086}00086\ MotorDirection\ \mbox{\hyperlink{main_8h_ab2b585ff7fc7962f84f327a23c212670}{chooseDirection}}(\textcolor{keywordtype}{int}\ currentFloor);}
+\DoxyCodeLine{\Hypertarget{main_8h_source_l00091}00091\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{main_8h_a0733525b77710d1c965898c384c1da68}{openDoor}}(\textcolor{keywordtype}{void});}
+
+\end{DoxyCode}

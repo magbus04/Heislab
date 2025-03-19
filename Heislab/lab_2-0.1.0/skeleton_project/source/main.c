@@ -4,7 +4,8 @@
 #include <time.h>
 #include <unistd.h>
 #include "driver/elevio.h"
-#include "test.h"
+#include "main.h"
+
 
 // Kalibreringsfunksjon: Få heisen til å komme til en definert etasje ved oppstart
 void calibrateElevator() {

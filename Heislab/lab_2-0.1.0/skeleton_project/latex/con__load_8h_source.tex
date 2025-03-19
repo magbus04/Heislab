@@ -1,0 +1,89 @@
+\doxysection{con\+\_\+load.\+h}
+\hypertarget{con__load_8h_source}{}\label{con__load_8h_source}\index{source/driver/con\_load.h@{source/driver/con\_load.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00003}00003\ \textcolor{preprocessor}{\#include\ <string.h>}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <strings.h>}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00005}00005\ }
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00006}00006\ \textcolor{comment}{//\ Load\ values\ from\ a\ config\ file}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00007}00007\ \textcolor{comment}{//\ }}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00008}00008\ \textcolor{comment}{//\ \ Key-\/value\ pairs\ in\ the\ config\ file\ are\ assumed\ to\ be\ of\ the\ form:}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00009}00009\ \textcolor{comment}{//\ \ "{}-\/-\/key\ value"{}}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00010}00010\ \textcolor{comment}{//\ \ Lines\ not\ starting\ in\ "{}-\/-\/"{}\ are\ ignored.}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00011}00011\ \textcolor{comment}{//\ \ Keys\ are\ *not*\ case-\/sensitive}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00012}00012\ \textcolor{comment}{//\ \ Enum\ values\ are\ *not*\ case-\/sensitive}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00013}00013\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00014}00014\ \textcolor{comment}{//\ keyuments:}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00015}00015\ \textcolor{comment}{//\ \ file:\ \ \ Name\ of\ the\ file\ to\ load.}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00016}00016\ \textcolor{comment}{//\ \ cases:\ \ One\ or\ more\ instance\ of\ \`{}con\_val()`\ or\ \`{}con\_enum()`}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00017}00017\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ The\ cases\ must\ *not*\ be\ separated\ by\ commas.}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00018}00018\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00019}00019\ \textcolor{comment}{//\ \ Example:}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00020}00020\ \textcolor{comment}{//\ \ \ \ \ \ /*\ Content\ of\ "{}config.con"{}:}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00021}00021\ \textcolor{comment}{//\ \ \ \ \ \ \`{}\`{}\`{}}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00022}00022\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ -\/-\/integer\ 5}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00023}00023\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ -\/-\/greeting\ hello}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00024}00024\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ -\/-\/enumeration\ En2}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00025}00025\ \textcolor{comment}{//\ \ \ \ \ \ \`{}\`{}\`{}}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00026}00026\ \textcolor{comment}{//\ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00027}00027\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00028}00028\ \textcolor{comment}{//\ \ \ \ \ \ typedef\ enum\ \{\ En1,\ En2,\ En3\ \}\ En;}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00029}00029\ \textcolor{comment}{//\ \ \ \ \ \ int\ \ \ \ \ i;}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00030}00030\ \textcolor{comment}{//\ \ \ \ \ \ char\ \ \ \ s[16];}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00031}00031\ \textcolor{comment}{//\ \ \ \ \ \ En\ \ \ \ \ \ en;}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00032}00032\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00033}00033\ \textcolor{comment}{//\ \ \ \ \ \ con\_load("{}config.con"{},}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00034}00034\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ con\_val("{}integer"{},\ \&i,\ "{}\%d"{})}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00035}00035\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ con\_val("{}greeting"{},\ s,\ "{}\%[\string^\(\backslash\)n]"{})}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00036}00036\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ con\_enum("{}enumeration"{},\ \&en,\ }}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00037}00037\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ con\_match(En1)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00038}00038\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ con\_match(En2)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00039}00039\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ con\_match(En3)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00040}00040\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ )}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00041}00041\ \textcolor{comment}{//\ \ \ \ \ \ )}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00042}00042\ \textcolor{comment}{//\ \ \ \ \ \ printf("{}\%s,\ \%d,\ \%d\(\backslash\)n"{},\ s,\ i,\ en);\ \ \ //\ Should\ print\ "{}hello,\ 5,\ 1"{}}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00043}00043\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00044}00044\ \textcolor{preprocessor}{\#define\ con\_load(file,\ cases)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00045}00045\ \textcolor{preprocessor}{\{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00046}00046\ \textcolor{preprocessor}{\ \ \ \ FILE*\ \_f\ =\ fopen(file,\ "{}r"{});\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00047}00047\ \textcolor{preprocessor}{\ \ \ \ if(\_f)\{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00048}00048\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ char\ \_line[128]\ =\ \{0\};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00049}00049\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ while(fgets(\_line,\ 128,\ \_f))\{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00050}00050\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ if(!strncmp(\_line,\ "{}-\/-\/"{},\ 2))\{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00051}00051\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ char\ \_key[64];\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00052}00052\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ char\ \_val[64];\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00053}00053\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sscanf(\_line,\ "{}-\/-\/\%s\ \%s"{},\ \_key,\ \_val);\ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00054}00054\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cases\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00055}00055\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00056}00056\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00057}00057\ \textcolor{preprocessor}{\ \ \ \ \}\ else\ \{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00058}00058\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ printf("{}Unable\ to\ open\ config\ file\ \%s\(\backslash\)n"{},\ file);\ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00059}00059\ \textcolor{preprocessor}{\ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00060}00060\ \textcolor{preprocessor}{\}}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00061}00061\ }
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00062}00062\ }
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00063}00063\ \textcolor{preprocessor}{\#define\ con\_val(key,\ var,\ fmt)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00064}00064\ \textcolor{preprocessor}{\ \ \ \ if(!strcasecmp(\_key,\ key))\{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00065}00065\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ sscanf(\_val,\ fmt,\ var);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00066}00066\ \textcolor{preprocessor}{\ \ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00067}00067\ }
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00068}00068\ }
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00069}00069\ \textcolor{preprocessor}{\#define\ con\_enum(key,\ var,\ match\_cases)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00070}00070\ \textcolor{preprocessor}{\ \ \ \ if(!strcasecmp(\_key,\ key))\{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00071}00071\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ typeof(*var)\ \_v;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00072}00072\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ match\_cases\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00073}00073\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ *var\ =\ \_v;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00074}00074\ \textcolor{preprocessor}{\ \ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00075}00075\ }
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00076}00076\ \textcolor{preprocessor}{\#define\ con\_match(id)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00077}00077\ \textcolor{preprocessor}{\ \ \ \ if(!strcasecmp(\_val,\ \#id))\{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00078}00078\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \_v\ =\ id;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00079}00079\ \textcolor{preprocessor}{\ \ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00080}00080\ }
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00081}00081\ }
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00082}00082\ }
+\DoxyCodeLine{\Hypertarget{con__load_8h_source_l00083}00083\ }
+
+\end{DoxyCode}
